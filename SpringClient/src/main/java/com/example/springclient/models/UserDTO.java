@@ -5,6 +5,9 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+/**
+ * Сущность пользователя для взаимодействия с репозиторием
+ */
 @Data
 @Entity
 @Table(name = "users")
