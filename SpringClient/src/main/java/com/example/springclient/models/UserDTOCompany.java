@@ -2,6 +2,9 @@ package com.example.springclient.models;
 
 import lombok.Data;
 
+/**
+ * Сущность пользователя с компанией
+ */
 @Data
 public class UserDTOCompany {
     private Long id;
