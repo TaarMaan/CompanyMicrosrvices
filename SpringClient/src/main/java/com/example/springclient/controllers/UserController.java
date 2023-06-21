@@ -34,6 +34,9 @@ import java.security.Principal;
 import java.util.*;
 import java.util.stream.Stream;
 
+/**
+ * Основной контроллер HTTP-запросов
+ */
 @RequestMapping(value = "/users")
 @RestController
 public class UserController {
@@ -63,6 +66,12 @@ public class UserController {
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
+    /**
+     * Удаление пользователя по id
+     *
+     * @param userId
+     * @return Возвращает подтверждение удаления пользователя
+     */
     @DeleteMapping(path = "/delete/{userId}")
     public String deleteUser(@PathVariable("userId") String userId) {
         Keycloak keycloak = keycloakService.getToken();
@@ -72,6 +81,11 @@ public class UserController {
         return "User Deleted Successfully.";
     }
 
+    /**
+     *
+     * @param userId
+     * @return возвращает пользователя по id
+     */
     @GetMapping(path = "/find/{userId}")
     public UserRepresentation findUserById(@PathVariable("userId") String userId) {
         Keycloak keycloak = keycloakService.getToken();
@@ -81,6 +95,11 @@ public class UserController {
         return user;
     }
 
+    /**
+     *
+     * @param litter
+     * @return возвращает list пользователей keycloak
+     */
     @GetMapping(path = "/findAllUsers/{litter}")
     public Stream<UserRepresentation> findAllUsers(@PathVariable("litter") String litter) {
         Keycloak keycloak = keycloakService.getToken();
@@ -89,11 +108,22 @@ public class UserController {
         return list.stream().filter(x -> x.getUsername().startsWith(litter));
     }
 
+    /**
+     *
+     * @return Тестовый энд-поинт
+     */
     @GetMapping(path = "/hello")
     public String getHello() {
         return "CCCMMCMCMCMCMCM";
     }
 
+    /**
+     *
+     * @param userId id из HTTP-запроса
+     * @param userDTO Пользователь из HTTP-запроса
+     * @return Обновляет данные пользователя Keycloak
+     * @throws IllegalAccessException
+     */
     @PutMapping(path = "/update/{userId}")
     public String updateUser(@PathVariable("userId") String userId, @RequestBody UserDTO userDTO) throws IllegalAccessException {
         Keycloak keycloak = keycloakService.getToken();
@@ -156,6 +186,11 @@ public class UserController {
         return "User Details Updated Successfully";
     }
 
+    /**
+     *
+     * @param userId id из HTTP-запроса
+     * @return Удаление роли из конфигурации Keycloak
+     */
     @PutMapping(path = "/remove_role/{userId}")
     public String removeRole(@PathVariable("userId") String userId) {
         Keycloak keycloak = keycloakService.getToken();
@@ -191,6 +226,12 @@ public class UserController {
         return "User Role Removed Successfully";
     }
 
+    /**
+     *
+     * @param userDTO пользователь из БД
+     * @param principal
+     * @return Возвращает пользователя и всю информацю о нем
+     */
     @GetMapping("/userinfo")
     public UserDTO userInfoController(UserDTO userDTO, Principal principal) {
         KeycloakAuthenticationToken keycloakAuthenticationToken = (KeycloakAuthenticationToken) principal;
@@ -211,7 +252,11 @@ public class UserController {
         return userDTO;
     }
 
-
+    /**
+     *
+     * @param userDTO Типо создаваемой сущности
+     * @return создание юзера по заданным в формате JSON параметров, такие как: почта, имя, пароль и.т.д.
+     */
     @PostMapping(path = "/create")
     public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
 
@@ -278,6 +323,11 @@ public class UserController {
         return ResponseEntity.ok(userDTO);
     }
 
+    /**
+     *
+     * @param userDTO Пользователь из HTTP-запроса
+     * @return аутентификация в клиенте по полученным данным из БД пользователя
+     */
     @PostMapping(path = "/signin")
     public ResponseEntity<?> signin(@RequestBody UserDTO userDTO) {
 
@@ -293,11 +343,22 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     *
+     * @param userId
+     * @return Возвращает пользователя по id
+     */
     @GetMapping(path = "/{userId}")
     public Boolean findById(@PathVariable("userId") long userId) {
         return userService.findByUserId(userId);
     }
 
+    /**
+     *
+     * @param userId
+     * @return Возвращает пользователя с компанией
+     * @throws JsonProcessingException
+     */
     @GetMapping(path = "getOne/{userId}")
     public String getOne(@PathVariable("userId") long userId) throws JsonProcessingException {
         UserDTO user = userService.getByUserId(userId);
@@ -323,6 +384,10 @@ public class UserController {
         return obj;
     }
 
+    /**
+     *
+     * @return Возвращает список всех пользователей
+     */
     @GetMapping(path = "/all")
     public List<String> getAll() {
         List<String> userDTOs = new ArrayList<>();
