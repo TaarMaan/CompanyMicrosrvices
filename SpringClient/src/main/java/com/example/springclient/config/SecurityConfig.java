@@ -23,11 +23,20 @@ import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper
 import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
+/**
+ * Конфигурации security подключений, сущностей, сессий и их валидация
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @ComponentScan(basePackageClasses = KeycloakSecurityComponents.class)
 public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
+    /**
+     * Задание ролевых ограничений на функционал контроллера
+     *
+     * @param http
+     * @throws Exception
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
@@ -36,7 +45,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
                 sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
                 .antMatchers("/users/create").permitAll()
-               // .antMatchers("users/userId").permitAll()
+                // .antMatchers("users/userId").permitAll()
                 .antMatchers("users/hello").permitAll()
                 .antMatchers("users/getOne/{userId}").permitAll()
                 .antMatchers("/users/signin").permitAll()
