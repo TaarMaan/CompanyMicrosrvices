@@ -12,11 +12,18 @@ import org.keycloak.representations.idm.CredentialRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Сервис по реализации методов серверно авторизации Keycloak
+ */
 @Service
 public class KeycloakService {
     @Autowired
     ConfigurationService configurationService;
 
+    /**
+     *
+     * @return получение токена авторизации
+     */
     public Keycloak getToken() {
         Keycloak keycloak = KeycloakBuilder.builder().serverUrl(configurationService.getAuthServerUrl())
                 .grantType(OAuth2Constants.PASSWORD).realm(configurationService.getMasterRealm()).clientId(configurationService.getMasterClientId())
@@ -27,6 +34,11 @@ public class KeycloakService {
         return keycloak;
     }
 
+    /**
+     *
+     * @param keycloak включает в себя конфигурацию пользователя созданного на Keycloak
+     * @return возвращает id клиента
+     */
     public String getClientId(Keycloak keycloak) {
         String client_id = keycloak
                 .realm(configurationService.getRealm())
@@ -37,6 +49,12 @@ public class KeycloakService {
         return client_id;
     }
 
+    /**
+     *
+     * @param userDTO Сущность клиента в базе данных кейклока
+     * @param usersResource передача созданного клиента Keycloak
+     * @param userId id созданного юзера
+     */
     public void setPassword(UserDTO userDTO, UsersResource usersResource, String userId) {
         CredentialRepresentation passwordCred = new CredentialRepresentation();
         passwordCred.setTemporary(false);
