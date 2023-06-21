@@ -1,0 +1,12 @@
+com\example\springclient\service\UserService.class
+com\example\springclient\AppController.class
+com\example\springclient\controllers\UserController.class
+com\example\springclient\repository\UserRepository.class
+com\example\springclient\models\UserDTO.class
+com\example\springclient\config\Consumer.class
+com\example\springclient\models\UserDTOCompany.class
+com\example\springclient\config\SecurityConfig.class
+com\example\springclient\config\ConfigurationService.class
+com\example\springclient\SpringClientApplication.class
+com\example\springclient\SimpleClient.class
+com\example\springclient\service\KeycloakService.class
