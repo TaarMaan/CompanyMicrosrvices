@@ -1,44 +1,49 @@
 package com.example.springclient.config;
 
-import com.example.springclient.AppController;
-import com.example.springclient.models.UserDTO;
-import com.example.springclient.service.UserService;
-import org.apache.kafka.clients.producer.Producer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.util.List;
-
+/**
+ * Сервис для определения методов конфигурации keycloak
+ */
+@RefreshScope
 @Service
-public class Consumer {
-    private static final Logger logger = LoggerFactory.getLogger(Producer.class);
-
-    private UserService userService;
-
-    private AppController appController;
-
+public class ConfigurationService {
     @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
+    private Environment env;
+
+    public String getAuthServerUrl() {
+        return env.getProperty("keycloak.auth-server-url");
     }
 
-    /**
-     * Слушатель удаленных или измененнх компаний, выводящий изменения в логи
-     *
-     * @param message
-     * @throws IOException
-     */
-    @KafkaListener(topics = "delete_companies", groupId = "group_id")
-    public void consume(String message) throws IOException {
-        System.out.println(message);
-        logger.info(String.format("#### -> Producing message -> %s", message));
-        List<UserDTO> users = userService.findByCompanyId(Integer.valueOf(message));
-        for (UserDTO userdto : users) {
-            userService.updateCompany(Math.toIntExact(userdto.getId()));
-        }
+    public String getRealm() {
+        return env.getProperty("keycloak.realm");
     }
+
+    public String getClientId() {
+        return env.getProperty("keycloak.resource");
+    }
+
+    public String getClientSecret() {
+        return env.getProperty("clientSecret");
+    }
+
+    public String getMasterRealm() {
+        return env.getProperty("master.realm");
+    }
+
+    public String getMasterClientId() {
+        return env.getProperty("master.clientId");
+    }
+
+    public String getMasterUsername() {
+        return env.getProperty("master.username");
+    }
+
+    public String getMasterPassword() {
+        return env.getProperty("master.password");
+    }
+
 }
