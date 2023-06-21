@@ -26,6 +26,12 @@ public class Consumer {
         this.userService = userService;
     }
 
+    /**
+     * Слушатель удаленных или измененнх компаний, выводящий изменения в логи
+     *
+     * @param message
+     * @throws IOException
+     */
     @KafkaListener(topics = "delete_companies", groupId = "group_id")
     public void consume(String message) throws IOException {
         System.out.println(message);
